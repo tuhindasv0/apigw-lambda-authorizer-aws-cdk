@@ -38,7 +38,7 @@ export class ApigwLambdaAuthorizerAwsCdkStack extends cdk.Stack {
      
     });
 
-    const authorizerhandler = new lambda.Function(this, "MainHandler", {
+    const authorizerhandler = new lambda.Function(this, "AuthorizerHandler", {
       runtime: lambda.Runtime.NODEJS_14_X, 
       code: lambda.Code.fromAsset("authorizerLambda"),
       handler: "index.main",
