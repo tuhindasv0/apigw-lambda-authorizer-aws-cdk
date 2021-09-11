@@ -11,7 +11,7 @@ export class ApigwLambdaAuthorizerAwsCdkStack extends cdk.Stack {
       statements: [
         new iam.PolicyStatement({
           resources: ['arn:aws:logs:*:*:log-group:/aws/lambda/*'],
-          actions: ['logs:FilterLogEvents'],
+          actions: ['logs:*'],
           effect: iam.Effect.ALLOW,
         }),
       ],
