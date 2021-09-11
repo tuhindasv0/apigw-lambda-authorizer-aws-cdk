@@ -30,7 +30,7 @@ jobs:
       - run:
           name: Bootstrap AWS
           command: |
-            cdk bootstrap aws://${AWS_ACCOUNt}/us-east-1
+            cdk bootstrap aws://${AWS_ACCOUNT_ID}/us-east-1
             cdk synth
         
 
