@@ -19,9 +19,9 @@ export class ApigwLambdaAuthorizerAwsCdkStack extends cdk.Stack {
  
 
 
-    const role = new iam.Role(this, 'example-iam-role', {
+    const role = new iam.Role(this, 'main-lambda-iam-role', {
       assumedBy: new iam.ServicePrincipal('lambda.amazonaws.com'),
-      description: 'An example IAM role in AWS CDK',
+      description: 'An IAM role for main lambda function',
       inlinePolicies: {
         FilterLogEvents: filterLogEvents,
       },

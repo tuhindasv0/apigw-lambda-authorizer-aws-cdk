@@ -28,6 +28,10 @@ jobs:
           key: v1-dependencies-
 
       - run:
+          name: Build application
+          command: npm run build
+
+      - run:
           name: Bootstrap AWS
           command: |
             cdk bootstrap aws://${AWS_ACCOUNT_ID}/us-east-1
