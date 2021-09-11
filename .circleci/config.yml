@@ -1,0 +1,39 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/node:latest
+
+    working_directory: ~/repo
+
+    steps:
+      - checkout
+
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+          - v1-dependencies-
+          # fallback to using the latest cache if no exact match is found
+          - v1-dependencies-
+
+      - run:
+          name: Install aws cdk CLI and dependencies
+          command: |
+            sudo npm install -g --unsafe-perm aws-cdk
+            npm install
+
+      - save_cache:
+          paths:
+            - node_modules
+          key: v1-dependencies-
+
+      - run:
+          name: Bootstrap AWS
+          command: |
+            cdk bootstrap aws://${AWS_ACCOUNt}/us-east-1
+            cdk synth
+        
+
+      - run:
+          name: Deploy application
+          command: cdk deploy --require-approval never
