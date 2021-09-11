@@ -2,6 +2,7 @@ import * as cdk from '@aws-cdk/core';
 import * as  iam from '@aws-cdk/aws-iam';
 import * as lambda from "@aws-cdk/aws-lambda";
 import * as apigateway from "@aws-cdk/aws-apigateway";
+import { IdentitySource } from '@aws-cdk/aws-apigateway';
 
 export class ApigwLambdaAuthorizerAwsCdkStack extends cdk.Stack {
   constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
@@ -28,26 +29,42 @@ export class ApigwLambdaAuthorizerAwsCdkStack extends cdk.Stack {
       },
     });
   
-    const handler = new lambda.Function(this, "MainHandler", {
+    const mainhandler = new lambda.Function(this, "MainHandler", {
       runtime: lambda.Runtime.NODEJS_14_X, 
       code: lambda.Code.fromAsset("mainLambda"),
       handler: "index.main",
       role: role,
+      functionName: "main-function"
      
     });
 
+    const authorizerhandler = new lambda.Function(this, "MainHandler", {
+      runtime: lambda.Runtime.NODEJS_14_X, 
+      code: lambda.Code.fromAsset("authorizerLambda"),
+      handler: "index.main",
+      functionName: "authorizer-function"
+      role: role,     
+    });
+
+    
 
     const api = new apigateway.RestApi(this, "lambda-authorizer-test", {
       restApiName: "lambda-authorizer-test",
       description: "This API to test lambda authorizer."
     });
 
+    const auth = new apigateway.RequestAuthorizer(this, 'booksAuthorizer', {
+      handler: authorizerhandler,
+      identitySources: [IdentitySource.header('Authorization')]
+    });
 
-    const lambdaIntegration = new apigateway.LambdaIntegration(handler, {
+    const lambdaIntegration = new apigateway.LambdaIntegration(mainhandler, {
       requestTemplates: { "application/json": '{ "statusCode": "200" }' }
     });
 
-    api.root.addMethod("GET", lambdaIntegration);
+    api.root.addMethod("GET", lambdaIntegration,{
+      authorizer: auth
+    });
 
   }
 }
