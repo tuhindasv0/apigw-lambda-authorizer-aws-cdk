@@ -53,17 +53,17 @@ export class ApigwLambdaAuthorizerAwsCdkStack extends cdk.Stack {
       description: "This API to test lambda authorizer."
     });
 
-    const auth = new apigateway.RequestAuthorizer(this, 'booksAuthorizer', {
+    /* const auth = new apigateway.RequestAuthorizer(this, 'lambdaAuthorizer', {
       handler: authorizerhandler,
       identitySources: [IdentitySource.header('Authorization')]
-    });
+    }); */
 
     const lambdaIntegration = new apigateway.LambdaIntegration(mainhandler, {
       requestTemplates: { "application/json": '{ "statusCode": "200" }' }
     });
 
     api.root.addMethod("GET", lambdaIntegration,{
-      authorizer: auth
+      //authorizer: auth
     });
 
   }
