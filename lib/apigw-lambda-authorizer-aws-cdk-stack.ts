@@ -1,6 +1,7 @@
 import * as cdk from '@aws-cdk/core';
 import * as  iam from '@aws-cdk/aws-iam';
 import * as lambda from "@aws-cdk/aws-lambda";
+import * as apigateway from "@aws-cdk/aws-apigateway";
 
 export class ApigwLambdaAuthorizerAwsCdkStack extends cdk.Stack {
   constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
@@ -34,5 +35,19 @@ export class ApigwLambdaAuthorizerAwsCdkStack extends cdk.Stack {
       role: role,
      
     });
+
+
+    const api = new apigateway.RestApi(this, "lambda-authorizer-test", {
+      restApiName: "lambda-authorizer-test",
+      description: "This API to test lambda authorizer."
+    });
+
+
+    const lambdaIntegration = new apigateway.LambdaIntegration(handler, {
+      requestTemplates: { "application/json": '{ "statusCode": "200" }' }
+    });
+
+    api.root.addMethod("GET", lambdaIntegration);
+
   }
 }
