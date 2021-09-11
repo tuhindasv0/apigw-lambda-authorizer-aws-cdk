@@ -1,4 +1,4 @@
-import { anything } from "@aws-cdk/assert";
+
 
 exports.main = async function(event: any, context: any,callback:any) {
 
