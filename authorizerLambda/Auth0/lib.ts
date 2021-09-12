@@ -23,7 +23,7 @@ const getToken = (params) => {
         throw new Error('Expected "event.type" parameter to have value "TOKEN"');
     }
 
-    const tokenString = params.authorizationToken;
+    const tokenString = params.headers.Authorization;
     if (!tokenString) {
         throw new Error('Expected "event.authorizationToken" parameter to be set');
     }
