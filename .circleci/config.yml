@@ -21,6 +21,9 @@ jobs:
           command: |
             sudo npm install -g --unsafe-perm aws-cdk
             npm install
+            cd ./authorizerLambda/Auth0
+            npm install
+            cd ../..
 
       - save_cache:
           paths:
